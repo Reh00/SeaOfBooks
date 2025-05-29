@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Sea of Books | Um oceano de livros{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+{% block content %}
+
+<section class="bg-gray-900 bg-[url('/static/images/hero-bg.jpg')] bg-cover bg-center h-[500px] flex items-center justify-center text-center relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-gray-900"></div>
+    <div class="relative z-10 max-w-2xl px-4">
+        <h1 class="text-5xl font-normal text-white uppercase tracking-widest mb-6">Mergulhe em Universos Fantásticos</h1>
+        <p class="text-lg text-gray-300 mb-8">Navegue por histórias profundas, descubra mundos ocultos e mergulhe em narrativas que arrepiam a alma.</p>
+        <a href="{{ url_for('books.catalog') }}" class="inline-block bg-red-700 text-white px-8 py-3 rounded uppercase tracking-wide hover:bg-red-800 transition-colors">Explorar Catálogo</a>
+    </div>
+</section>
+
+<!-- LANÇAMENTOS -->
+<section class="py-20">
+    <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-white uppercase tracking-wider text-center mb-12 relative pb-4 after:content-[''] after:absolute after:w-24 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-1/2 after:-translate-x-1/2">Lançamentos</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {% for livro in livros_destaque %}
+            <div class="book-card bg-gray-800 p-5 rounded overflow-hidden relative">
+                <img src="{{ livro.ImagemCapa }}" alt="{{ livro.Titulo }}" class="w-full h-[350px] object-cover transition-opacity hover:opacity-90">
+                <div class="overlay">
+                    <p class="text-white text-lg font-bold mb-2">R$ {{ livro.Preco }}</p>
+                    <a href="{{ url_for('books.book_details', livro_id=livro.Id) }}" class="btn-overlay">Ver Detalhes</a>
+                    <form action="{{ url_for('cart.add_to_cart', livro_id=livro.Id) }}" method="POST" class="mt-2">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="quantidade" value="1">
+                        <button type="submit" class="btn-overlay">Compra Rápida</button>
+                    </form>
+                </div>
+                  
+                <div class="mt-4">
+                    <h3 class="text-lg text-white mb-1">{{ livro.Titulo }}</h3>
+                    <p class="text-gray-500 italic mb-2">por {{ livro.Autor }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-20 text-center">
+    <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-white uppercase tracking-wider mb-4 relative pb-4 after:content-[''] after:absolute after:w-24 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-1/2 after:-translate-x-1/2">Inscreva-se</h2>
+        <p class="text-gray-300 mb-8">Receba novidades, promoções exclusivas e conteúdo especial diretamente no seu e-mail.</p>
+        <form action="{{ url_for('main.newsletter') }}" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto pt-8">
+            <input type="email" name="email" placeholder="Seu melhor e-mail" class="flex-1 p-4 border border-gray-600 bg-gray-800 text-gray-300 rounded focus:border-red-700 focus:outline-none" required>
+            <button type="submit" class="bg-red-700 text-white px-8 py-4 rounded uppercase tracking-wide hover:bg-red-800 transition-colors">Assinar</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

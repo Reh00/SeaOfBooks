@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}Trocas e Devoluções - Sea of Books{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-white mb-6">Política de Trocas e Devoluções</h1>
+    
+    <div class="bg-gray-800 p-8 rounded-lg border border-gray-600 text-gray-300 space-y-8">
+        <!-- Introdução -->
+        <section>
+            <p class="mb-4">
+                Na <strong class="text-blue-300">Sea of Books</strong>, queremos que sua experiência de leitura seja perfeita. Caso precise trocar ou devolver um produto, seguimos as normas do Código de Defesa do Consumidor.
+            </p>
+            <div class="p-4 bg-gray-700 rounded border-l-4 border-blue-500">
+                <p>🔄 <strong>Processo simplificado:</strong> Trocas e devoluções em até 7 dias para produtos não danificados.</p>
+            </div>
+        </section>
+
+        <!-- Direito de Arrependimento -->
+        <section>
+            <h2 class="text-2xl font-semibold text-blue-300 mb-3">1. Direito de Arrependimento</h2>
+            <ul class="list-disc pl-6 space-y-2">
+                <li><strong>Prazo:</strong> 7 dias corridos a partir do recebimento</li>
+                <li><strong>Condições:</strong>
+                    <ul class="list-circle pl-6 mt-1 space-y-1">
+                        <li>Produto deve estar na embalagem original</li>
+                        <li>Livros não podem estar com marcas de uso</li>
+                        <li>Nota fiscal deve estar incluída</li>
+                    </ul>
+                </li>
+                <li><strong>Como solicitar:</strong> Acesse "Meus Pedidos" e clique em "Solicitar Devolução"</li>
+            </ul>
+        </section>
+
+        <!-- Produtos com Defeito -->
+        <section>
+            <h2 class="text-2xl font-semibold text-blue-300 mb-3">2. Produtos com Defeito</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">✅ Casos que cobrimos:</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Páginas faltantes ou duplicadas</li>
+                        <li>Erros graves de impressão</li>
+                        <li>Danos durante o transporte (fotos obrigatórias)</li>
+                        <li>Produto diferente do pedido</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">❌ Não cobrimos:</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Danos por uso inadequado</li>
+                        <li>Livros digitais já ativados</li>
+                        <li>Produtos de colecionador sem avaria</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-4 text-sm text-gray-400">
+                * Para defeitos, o prazo é de 30 dias após o recebimento.
+            </p>
+        </section>
+
+        <!-- Passo a Passo -->
+        <section>
+            <h2 class="text-2xl font-semibold text-blue-300 mb-3">3. Como Funciona</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <!-- Passo 1 -->
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-xl font-bold">1</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Solicitação</h3>
+                    <p class="text-sm">
+                        Acesse sua conta ou entre em contato pelo e-mail <a href="mailto:trocas@seaofbooks.com" class="text-blue-300">trocas@seaofbooks.com</a>
+                    </p>
+                </div>
+                
+                <!-- Passo 2 -->
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-xl font-bold">2</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Postagem</h3>
+                    <p class="text-sm">
+                        Enviaremos uma etiqueta pré-paga. Embalagem deve ser resistente.
+                    </p>
+                </div>
+                
+                <!-- Passo 3 -->
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-xl font-bold">3</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Solução</h3>
+                    <p class="text-sm">
+                        Após análise (3 dias úteis), faremos a troca ou reembolso.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reembolsos -->
+        <section>
+            <h2 class="text-2xl font-semibold text-blue-300 mb-3">4. Política de Reembolso</h2>
+            <table class="min-w-full border border-gray-600">
+                <thead class="bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Forma de Pagamento</th>
+                        <th class="px-4 py-2 text-left">Prazo</th>
+                        <th class="px-4 py-2 text-left">Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-600">
+                        <td class="px-4 py-2">Cartão de Crédito</td>
+                        <td class="px-4 py-2">Até 2 faturas</td>
+                        <td class="px-4 py-2">Estorno na fatura atual ou próxima</td>
+                    </tr>
+                    <tr class="border-b border-gray-600">
+                        <td class="px-4 py-2">PIX</td>
+                        <td class="px-4 py-2">24-48h</td>
+                        <td class="px-4 py-2">Enviaremos comprovante</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2">Boleto/Débito</td>
+                        <td class="px-4 py-2">5 dias úteis</td>
+                        <td class="px-4 py-2">Conta bancária com mesmo CPF</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="mt-4 p-3 bg-yellow-900/30 rounded border border-yellow-600">
+                <p>⚠️ <strong>Atenção:</strong> O frete só será reembolsado em casos de erro nosso ou produto com defeito.</p>
+            </div>
+        </section>
+
+        <!-- Trocas Especiais -->
+        <section>
+            <h2 class="text-2xl font-semibold text-blue-300 mb-3">5. Casos Especiais</h2>
+            <div class="space-y-4">
+                <div class="p-4 bg-gray-700 rounded-lg border-l-4 border-green-500">
+                    <h3 class="font-semibold mb-1">📚 Coleções Incompletas</h3>
+                    <p>Se receber volumes fora de ordem em uma coleção, faremos a troca imediata pelo correto.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg border-l-4 border-purple-500">
+                    <h3 class="font-semibold mb-1">🎁 Presentes</h3>
+                    <p>Para itens recebidos como presente, o comprador original deve iniciar o processo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato -->
+        <section class="pt-4">
+            <div class="bg-gray-700 p-6 rounded-lg text-center">
+                <h3 class="text-xl font-semibold mb-2">Precisa de ajuda com sua troca?</h3>
+                <p class="mb-4">Nossa equipe está pronta para assistência personalizada:</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:{{ config['SUPPORT_EMAIL'] }}" class="px-4 py-2 bg-gray-600 rounded-md hover:bg-blue-600 transition">
+                        ✉️ E-mail
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="text-blue-300 hover:underline">Fale Conosco</a>
+                    <a href="tel:{{ config['SUPPORT_PHONE'] }}" class="px-4 py-2 bg-gray-600 rounded-md hover:bg-blue-600 transition">
+                        📞 Telefone
+                    </a>
+                </div>
+                <p class="mt-4 text-sm text-gray-400">
+                    Horário de atendimento: Segunda a Sexta, 9h às 18h | Sábado, 9h às 13h
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

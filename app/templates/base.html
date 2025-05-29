@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Sea of Books{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        {% block styles %}{% endblock %}
+    </head>
+    <body class="bg-gray-900 text-gray-300">
+        <header class="bg-gray-950 border-b border-gray-600 py-5">
+            <div class="max-w-6xl mx-auto px-4 flex items-center justify-between flex-wrap">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-anchor text-4xl text-white"></i>
+                    <div class="text-2xl font-bold uppercase tracking-wider text-white">
+                        Sea of<span class="text-red-700"> Books</span>
+                    </div>
+                </div>
+                <nav class="mt-4 md:mt-0">
+                    <ul class="flex flex-wrap space-x-8 text-sm uppercase tracking-wide">
+                        <li><a href="{{ url_for('books.index') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Início</a></li>
+                        <li><a href="{{ url_for('books.catalog') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Catálogo</a></li>
+                        <li><a href="{{ url_for('books.releases') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Lançamentos</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Contato</a></li>
+                        {% if current_user.is_authenticated and current_user.is_admin %}
+                            <li><a href="{{ url_for('books.register_book') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Cadastrar Livro</a></li>
+                            <li><a href="{{ url_for('books.manage_books') }}" class="text-gray-300 hover:text-red-700 relative underline-hover px-2 py-1">Gerenciar Livros</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <div class="relative w-full max-w-xs">
+                        <form action="{{ url_for('books.search') }}" method="GET" class="flex">
+                            <input type="text" name="q" placeholder="Buscar títulos, autores..." class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-md text-gray-300 focus:border-red-700 focus:outline-none">
+                            <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300"></i>
+                        </form>
+                    </div>
+                    <a href="{{ url_for('cart.cart') }}" class="relative">
+                        <i class="fas fa-shopping-cart text-xl text-gray-300 hover:text-red-700"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-700 text-white text-xs rounded-full px-2 py-1">{{ session.get('cart_count', 0) }}</span>
+                    </a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.logout') }}" class="ml-4" title="Sair">
+                            <i class="fas fa-sign-out-alt text-xl text-gray-300 hover:text-red-700"></i>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="ml-4" title="Entrar">
+                            <i class="fas fa-user text-xl text-gray-300 hover:text-red-700"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <!-- Mensagens de status -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="max-w-6xl mx-auto px-4 mt-4">
+                    {% for category, message in messages %}
+                        <div class="bg-{{ 'red-700' if category == 'error' else 'green-700' }} bg-opacity-20 text-white p-4 rounded border border-{{ 'red-700' if category == 'error' else 'green-700' }} text-center mb-6">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+        <footer class="bg-gray-950 border-t border-gray-600 py-12">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4 relative pb-2 after:content-[''] after:absolute after:w-10 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-0">Informações</h3>
+                        <ul class="space-y-2">
+                            <li><a href="{{ url_for('main.about') }}" class="text-gray-500 hover:text-red-700">Sobre Nós</a></li>
+                            <li><a href="{{ url_for('main.privacy') }}" class="text-gray-500 hover:text-red-700">Política de Privacidade</a></li>
+                            <li><a href="{{ url_for('main.terms') }}" class="text-gray-500 hover:text-red-700">Termos e Condições</a></li>
+                            <li><a href="{{ url_for('main.faq') }}" class="text-gray-500 hover:text-red-700">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4 relative pb-2 after:content-[''] after:absolute after:w-10 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-0">Atendimento</h3>
+                        <ul class="space-y-2">
+                            <li><a href="{{ url_for('main.contact') }}" class="text-gray-500 hover:text-red-700">Contato</a></li>
+                            <li><a href="{{ url_for('main.about') }}" class="text-gray-500 hover:text-red-700">Rastreamento de Pedidos</a></li>
+                            <li><a href="{{ url_for('main.returns') }}" class="text-gray-500 hover:text-red-700">Trocas e Devoluções</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-red-700">Envio e Entrega</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4 relative pb-2 after:content-[''] after:absolute after:w-10 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-0">Minha Conta</h3>
+                        <ul class="space-y-2">
+                            {% if current_user.is_authenticated %}
+                                <li><a href="{{ url_for('auth.logout') }}" class="text-gray-500 hover:text-red-700">Sair</a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('auth.login') }}" class="text-gray-500 hover:text-red-700">Entrar / Cadastrar</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('cart.my_orders') }}" class="text-gray-500 hover:text-red-700">Meus Pedidos</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-red-700">Lista de Desejos</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-red-700">Avaliações</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4 relative pb-2 after:content-[''] after:absolute after:w-10 after:h-0.5 after:bg-red-700 after:bottom-0 after:left-0">Siga-nos</h3>
+                        <p class="mb-4 text-gray-300">Acompanhe nossas redes sociais para novidades.</p>
+                        <div class="flex space-x-4">
+                            <a href="https://instagram.com/seaofbooks" class="text-xl text-gray-500 hover:text-red-700"><i class="fab fa-instagram"></i></a>
+                            <a href="https://facebook.com/seaofbooks" class="text-xl text-gray-500 hover:text-red-700"><i class="fab fa-facebook"></i></a>
+                            <a href="https://twitter.com/seaofbooks" class="text-xl text-gray-500 hover:text-red-700"><i class="fab fa-twitter"></i></a>
+                            <a href="https://tiktok.com/@seaofbooks" class="text-xl text-gray-500 hover:text-red-700"><i class="fab fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 text-center border-t border-gray-600 pt-6 text-gray-600 text-sm">
+                    © 2025 Sea of Books - Todos os direitos reservados
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

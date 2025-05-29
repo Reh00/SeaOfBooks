@@ -1,0 +1,29 @@
+
+
+.book-card .overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 1rem;
+    text-align: center;
+    font-size: larger;
+    
+
+}
+
+.book-card:hover .overlay {
+    opacity: 1; 
+}
+
+
+
+.btn-primary:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+}

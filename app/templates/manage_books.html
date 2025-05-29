@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar Livros | Sea of Books{% endblock %}
+{% block content %}
+<section class="py-16 bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-white uppercase tracking-wider text-center mb-8">Gerenciar Livros</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="bg-{{ 'red-700' if category == 'error' else 'green-700' }} bg-opacity-20 text-white p-4 rounded border border-{{ 'red-700' if category == 'error' else 'green-700' }} text-center mb-6">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="bg-gray-800 border border-gray-600 p-6 rounded">
+            <form action="{{ url_for('books.delete_books') }}" method="POST" id="delete-books-form">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-700 text-white">
+                            <th class="p-2"><input type="checkbox" id="select-all" onchange="toggleCheckboxes(this)"></th>
+                            <th class="p-2 text-left">Título</th>
+                            <th class="p-2 text-left">Autor</th>
+                            <th class="p-2 text-left">Preço</th>
+                            <th class="p-2 text-left">Estoque</th>
+                            <th class="p-2 text-left">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for livro in livros %}
+                        <tr class="border-b border-gray-600">
+                            <td class="p-2"><input type="checkbox" name="book_ids" value="{{ livro.Id }}"></td>
+                            <td class="p-2">{{ livro.Titulo }}</td>
+                            <td class="p-2">{{ livro.Autor }}</td>
+                            <td class="p-2">R$ {{ livro.Preco }}</td>
+                            <td class="p-2">{{ livro.Estoque }}</td>
+                            <td class="p-2">
+                                <a href="{{ url_for('books.book_details', livro_id=livro.Id) }}" class="text-blue-500 hover:underline">Ver</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="mt-4 flex justify-between">
+                    <a href="{{ url_for('books.register_book') }}" class="bg-red-700 text-white py-3 px-6 rounded uppercase font-bold hover:bg-red-800 transition-colors">Cadastrar Novo Livro</a>
+                    <button type="submit" class="bg-red-700 text-white py-3 px-6 rounded uppercase font-bold hover:bg-red-800 transition-colors" onclick="return confirm('Tem certeza que deseja deletar os livros selecionados?')">Deletar Selecionados</button>
+                </div>
+            </form>
+            {% if not livros %}
+            <div class="text-center p-10">
+                <p class="text-lg text-white">Nenhum livro encontrado.</p>
+                <a href="{{ url_for('books.register_book') }}" class="mt-4 inline-block bg-red-700 text-white pyIngrese una traducción precisa al español del siguiente texto en inglés:
+
+**"The only way to do great work is to love what you do."**
+
+La única manera de hacer un gran trabajo es amar lo que haces. -3 px-6 rounded uppercase font-bold hover:bg-red-800 transition-colors">Cadastrar Novo Livro</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<script>
+function toggleCheckboxes(source) {
+    document.querySelectorAll('input[name="book_ids"]').forEach(checkbox => {
+        checkbox.checked = source.checked;
+    });
+}
+</script>
+{% endblock %}

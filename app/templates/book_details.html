@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}{{ livro.Titulo }} | Sea of Books{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book_details.css') }}">
+   
+{% endblock %}
+{% block content %}
+<div class="book-details-container">
+    <div class="flex flex-col md:flex-row gap-6 items-start">
+        <div class="book-image flex-1 flex flex-col items-center">
+            <img src="{{ livro.ImagemCapa }}" alt="{{ livro.Titulo }}" id="main-image" class="max-w-full rounded shadow-lg">
+            <div class="thumbnail-gallery mt-4 flex gap-2">
+                <img src="{{ livro.ImagemCapa }}" alt="{{ livro.Titulo }} - Thumb 1" onclick="changeImage('{{ livro.ImagemCapa }}')" class="w-20 h-28 object-cover cursor-pointer rounded border border-gray-600">
+                <!-- Adicione mais miniaturas se houver imagens adicionais -->
+            </div>
+        </div>
+        <div class="book-info flex-1 p-6">
+            <h2 class="text-4xl font-extrabold mb-2">{{ livro.Titulo }}</h2>
+            <p class="text-lg text-gray-400 mt-1">{{ livro.Autor }}</p>
+
+
+
+            <div class="pricing-section bg-gray-900 p-4 rounded-lg mt-6">
+                <div class="price-container mb-4">
+                    <p class="text-3xl font-bold text-red-500">R$ {{ livro.Preco }}</p>
+                    <p class="text-gray-300">ou 4x de R$ {{ parcelas }} sem juros no PIX</p>
+                    <div class="cashback-badge mt-2">
+                        <span class="bg-green-900 text-green-400 px-3 py-1 rounded-full text-sm font-semibold">
+                            GANHE ATÉ R$ {{ cashback }} DE CASHBACK
+                        </span>
+                    </div>
+                </div>
+
+            <form action="{{ url_for('cart.add_to_cart', livro_id=livro.Id) }}" method="POST" class="quantity-form">
+                {{ form.hidden_tag() }}
+                <div class="flex items-center gap-4 mb-4">
+                    <label for="quantidade" class="text-gray-300 font-medium">Quantidade:</label>
+                    <div class="quantity-selector flex items-center">
+                        <button type="button" class="quantity-btn minus" onclick="decrementQuantity()">-</button>
+                        {{ form.quantidade(class="quantity-input", min="1", value="1") }}
+                        <button type="button" class="quantity-btn plus" onclick="incrementQuantity()">+</button>
+                    </div>
+                </div>
+                <button type="submit" class="add-to-cart-btn w-full py-3 px-6">
+                    <i class="fas fa-shopping-cart mr-2"></i> ADICIONAR AO CARRINHO
+                </button>
+            </form>
+        </div>
+
+
+
+            <!-- Move os dados para baixo do botão -->
+            <div class="mt-6 text-sm text-gray-400 space-y-1">
+                <p><strong>Editora:</strong> {{ livro.Editora if livro.Editora else 'Não informado' }}</p>
+                <p><strong>Gênero:</strong> {{ livro.Genero if livro.Genero else 'Não informado' }}</p>
+                <p><strong>Ano:</strong> {{ livro.Ano if livro.Ano else 'Não informado' }}</p>
+                <p><strong>ISBN:</strong> {{ livro.ISBN if livro.ISBN else 'Não informado' }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="description mt-10 border-t border-gray-700 pt-6">
+        <h3 class="text-2xl font-bold text-red-600 mb-2">Descrição</h3>
+        <p class="text-gray-300">{{ livro.Descricao if livro.Descricao else 'Não disponível' }}</p>
+    </div>
+
+    {% if recomendados %}
+    <div class="recommended-section mt-12">
+        <h3 class="text-2xl font-bold text-white">Livros Recomendados</h3>
+        <div class="book-grid">
+            {% for rec in recomendados %}
+            <div class="book-card">
+                <div class="relative rounded overflow-hidden">
+                    <img src="{{ rec.ImagemCapa }}" alt="{{ rec.Titulo }}" class="w-full h-64 object-cover">
+                    <div class="overlay">
+                        <p class="text-white text-lg font-bold mb-2">R$ {{ rec.Preco }}</p>
+                        <a href="{{ url_for('books.book_details', livro_id=rec.Id) }}" class="btn-primary">Ver Detalhes</a>
+                        <form action="{{ url_for('cart.add_to_cart', livro_id=rec.Id) }}" method="POST" class="mt-2">
+                            {{ forms_recomendados[rec.Id].hidden_tag() }}
+                            <input type="hidden" name="quantidade" value="1">
+                            <button type="submit" class="btn-primary">Compra Rápida</button>
+                        </form>
+                    </div>
+                </div>
+                <h3 class="text-white text-lg mt-2">{{ rec.Titulo }}</h3>
+                <p class="text-gray-400 text-sm">{{ rec.Autor }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+<script>
+function changeImage(src) {
+    document.getElementById('main-image').src = src;
+}
+
+function incrementQuantity() {
+    const input = document.querySelector('.quantity-input');
+    input.value = parseInt(input.value) + 1;
+}
+
+function decrementQuantity() {
+    const input = document.querySelector('.quantity-input');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+}
+
+</script>
+{% endblock %}

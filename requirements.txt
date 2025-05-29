@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+pyodbc
+flask-login
+flask-wtf
+email_validator
+python-dotenv==1.0.1
+Flask-Bcrypt==1.0.1
+

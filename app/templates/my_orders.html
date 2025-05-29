@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Meus Pedidos - Sea of Books{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/my_orders.css') }}">
+{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-white">Meus Pedidos</h1>
+            <a href="{{ url_for('books.catalog') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md transition flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            Continuar Comprando
+        </a>
+    </div>
+
+    {% if pedidos %}
+    <div class="bg-gray-800 rounded-lg border border-gray-600 overflow-hidden">
+        <!-- Filtros e Busca -->
+        <div class="bg-gray-700 p-4 border-b border-gray-600">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="relative w-full md:w-64">
+                    <input type="text" placeholder="Buscar pedido..." class="w-full pl-10 pr-4 py-2 bg-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                    <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <div class="flex gap-2">
+                    <select class="px-3 py-2 bg-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                        <option>Todos os status</option>
+                        <option>Processando</option>
+                        <option>Enviado</option>
+                        <option>Entregue</option>
+                        <option>Cancelado</option>
+                    </select>
+                    <select class="px-3 py-2 bg-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                        <option>Últimos 3 meses</option>
+                        <option>Este mês</option>
+                        <option>Últimos 6 meses</option>
+                        <option>Este ano</option>
+                        <option>Todos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Pedidos -->
+        <div class="divide-y divide-gray-700">
+            {% for pedido in pedidos %}
+            <div class="p-6 hover:bg-gray-700/50 transition">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+                    <div>
+                        <h3 class="font-semibold text-lg text-white">
+                            Pedido #{{ pedido.Id }}
+                            <span class="ml-2 px-2 py-1 text-xs rounded-full 
+                                {% if pedido.Status == 'Entregue' %}bg-green-900 text-green-300
+                                {% elif pedido.Status == 'Cancelado' %}bg-gray-900 text-gray-300
+                                {% elif pedido.Status == 'Enviado' %}bg-blue-900 text-blue-300
+                                {% else %}bg-yellow-900 text-yellow-300{% endif %}">
+                                {{ pedido.Status }}
+                            </span>
+                        </h3>
+                        <p class="text-sm text-gray-400">Realizado em {{ pedido.DataPedido.strftime('%d/%m/%Y às %H:%M') }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-400 text-sm">Total do pedido</p>
+                        <p class="text-xl font-bold text-white">R$ {{ "%.2f"|format(pedido.Total) }}</p>
+                    </div>
+                </div>
+
+                <!-- Itens do Pedido -->
+                <div class="mb-4">
+                    <h4 class="font-medium mb-2 text-white">Itens:</h4>
+                    <div class="grid gap-4">
+                        {% for item in pedido.Itens %}
+                        <div class="flex gap-4 p-3 bg-gray-700/50 rounded-lg items-center">
+                            <img src="{{ item.Imagem }}" alt="{{ item.Titulo }}" class="w-16 h-16 object-cover rounded">
+                            <div class="flex-1">
+                                <h5 class="font-medium text-white">{{ item.Titulo }}</h5>
+                                <p class="text-sm text-gray-400">Qtd: {{ item.Quantidade }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white">R$ {{ "%.2f"|format(item.Preco) }}</p>
+                                {% if item.Status == 'Devolvido' %}
+                                <span class="text-xs text-red-400">Devolvido</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-gray-700">
+                    <div>
+                        {% if pedido.Status == 'Enviado' %}
+                        <a href="{{ url_for('cart.rastreio', id=pedido.Id) }}" class="text-blue-400 hover:underline flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Rastrear pedido
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        {% if pedido.Status in ['Processando', 'Enviado'] %}
+                        <button class="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-500 rounded-md transition text-white">
+                            Cancelar
+                        </button>
+                        {% endif %}
+                        {% if pedido.Status == 'Entregue' %}
+                        <a href="{{ url_for('cart.solicitar_devolucao', pedido_id=pedido.Id) }}" class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-500 rounded-md transition text-white flex items-center gap-1">
+
+                           class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-500 rounded-md transition text-white flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Solicitar Devolução
+                        </a>
+                        {% endif %}
+                        <button class="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-500 rounded-md transition text-white flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Ver detalhes
+                        </button>
+                        <button class="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-500 rounded-md transition text-white flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Comprar novamente
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Paginação -->
+        <div class="bg-gray-700 p-4 border-t border-gray-600">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-400">Mostrando 1-{{ pedidos|length }} de {{ pedidos|length }} pedidos</span>
+                <div class="flex gap-1">
+                    <button class="px-3 py-1 bg-gray-600 rounded-md disabled:opacity-50 text-white" disabled>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <button class="px-3 py-1 bg-blue-600 rounded-md text-white">1</button>
+                    <button class="px-3 py-1 bg-gray-600 rounded-md hover:bg-gray-500 text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-gray-800 p-12 rounded-lg border border-gray-600 text-center">
+        <svg class="w-16 h-16 mx-auto text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-white mb-2">Nenhum pedido encontrado</h3>
+        <p class="text-gray-400 mb-6">Você ainda não realizou nenhum pedido em nossa livraria.</p>
+        <a href="{{ url_for('books.catalog') }}" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-md inline-block transition text-white">
+            Explorar Catálogo
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

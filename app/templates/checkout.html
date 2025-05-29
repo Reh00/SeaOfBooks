@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Finalizar Compra | Sea of Books{% endblock %}
+{% block content %}
+<section class="py-16 bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-white uppercase tracking-wider text-center mb-8">Finalizar Compra</h1>
+        {% if carrinho %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Resumo do Pedido -->
+            <div class="bg-gray-800 border border-gray-600 p-6 rounded">
+                <h2 class="text-2xl font-bold text-white mb-4">Resumo do Pedido</h2>
+                <table class="w-full border-collapse mb-4">
+                    <thead>
+                        <tr class="bg-gray-700 text-white">
+                            <th class="text-left p-2">Produto</th>
+                            <th class="text-left p-2">Quantidade</th>
+                            <th class="text-left p-2">Preço</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in carrinho %}
+                        <tr class="border-b border-gray-600">
+                            <td class="p-2">{{ item.Livro.Titulo }}</td>
+                            <td class="p-2">{{ item.Quantidade }}</td>
+                            <td class="p-2">R$ {{ (item.Livro.Preco * item.Quantidade) | round(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-lg font-bold text-white text-right">Total: R$ {{ total | round(2) }}</div>
+            </div>
+            <!-- Formulário de Checkout -->
+            <div class="bg-gray-800 border border-gray-600 p-6 rounded">
+                <h2 class="text-2xl font-bold text-white mb-4">Informações de Entrega e Pagamento</h2>
+                <form action="{{ url_for('cart.process_checkout') }}" method="POST">
+                    <div class="mb-4">
+                        <label class="block text-gray-300 mb-2" for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" class="w-full p-2 border border-gray-600 bg-gray-900 text-gray-300 rounded" value="{{ dados_entrega.nome }}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 mb-2" for="endereco">Endereço de Entrega</label>
+                        <input type="text" id="endereco" name="endereco" class="w-full p-2 border border-gray-600 bg-gray-900 text-gray-300 rounded" value="{{ dados_entrega.endereco }}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 mb-2" for="pagamento">Método de Pagamento</label>
+                        <select id="pagamento" name="pagamento" class="w-full p-2 border border-gray-600 bg-gray-900 text-gray-300 rounded" required>
+                            <option value="pix" {% if dados_entrega.pagamento == 'pix' %}selected{% endif %}>PIX</option>
+                            <option value="cartao" {% if dados_entrega.pagamento == 'cartao' %}selected{% endif %}>Cartão de Crédito</option>
+                            <option value="boleto" {% if dados_entrega.pagamento == 'boleto' %}selected{% endif %}>Boleto</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-red-700 text-white py-3 rounded uppercase font-bold hover:bg-red-800 transition-colors">Confirmar Pedido</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <i class="fas fa-shopping-cart text-6xl text-red-700 opacity-50 mb-6"></i>
+            <h2 class="text-2xl font-bold text-white">Seu carrinho está vazio</h2>
+            <a href="{{ url_for('books.catalog') }}" class="mt-6 inline-block bg-red-700 text-white py-4 px-8 rounded uppercase font-bold hover:bg-red-800">Explorar Catálogo</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Catálogo | Sea of Books{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalog.css') }}">
+{% endblock %}
+{% block content %}
+<div class="catalog-container">
+    <div class="filter-form">
+        <form action="{{ url_for('books.catalog') }}" method="GET" class="flex flex-row items-center justify-center gap-2 flex-wrap">
+            <select name="genero" onchange="this.form.submit()" class="genre-select">
+                <option value="all" {% if genero_filtro == 'all' %}selected{% endif %}>Gêneros</option>
+                {% for genero in generos %}
+                <option value="{{ genero }}" {% if genero_filtro == genero %}selected{% endif %}>{{ genero }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="busca" placeholder="Título, autor ou editora" value="{{ busca }}" class="search-input">
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search mr-1"></i> Busca </button>
+        </form>
+    </div>
+    {% if error %}
+    <div class="flash-message error">{{ error }}</div>
+    {% endif %}
+    <div class="book-grid">
+        {% for livro in livros %}
+        <div class="book-card">
+            <div class="relative rounded overflow-hidden">
+                <img src="{{ livro.ImagemCapa }}" alt="{{ livro.Titulo }}">
+                <div class="overlay">
+                    <p class="text-white text-lg font-bold mb-2">R$ {{ livro.Preco }}</p>
+                    <a href="{{ url_for('books.book_details', livro_id=livro.Id) }}" class="btn-primary">Ver Detalhes</a>
+                    <form action="{{ url_for('cart.add_to_cart', livro_id=livro.Id) }}" method="POST" class="mt-2">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="quantidade" value="1">
+                        <button type="submit" class="btn-primary">Compra Rápida</button>
+                    </form>
+                </div>
+            </div>
+            <h3 class="text-white text-lg mt-2">{{ livro.Titulo }}</h3>
+            <p class="text-gray-300 text-sm">{{ livro.Autor }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

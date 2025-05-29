@@ -1,0 +1,56 @@
+# Arquivos de ambiente
+.env
+*.env
+*.env.*
+
+# Arquivos de log
+*.log
+
+# Diretórios de cache e temporários
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de banco de dados
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# Diretórios de uploads (se contiverem dados sensíveis)
+static/uploads/*
+!static/uploads/.gitkeep  # Mantém o diretório vazio no Git
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de build e deploy
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Arquivos de cobertura de testes
+.coverage
+coverage.xml
+htmlcov/
+
+# Arquivos de configuração sensíveis
+config.py  # Se contiver credenciais hardcoded
+secrets.json
+credentials.json
+
+# Outros
+*.bak
+*.swp
+*~
