@@ -1,6 +1,6 @@
 # app/models.py
 from flask_login import UserMixin
-from . import db  # Importar db de app.__init__
+from . import db 
 
 class Livro(db.Model):
     __tablename__ = 'Livros'
